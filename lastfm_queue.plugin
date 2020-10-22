@@ -1,5 +1,5 @@
 [Plugin]
-Loader=python
+Loader=python3
 Module=lastfm_queue
 IAge=2
 Name=Last.fm Dynamic Tracks

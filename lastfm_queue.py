@@ -24,12 +24,12 @@ from lastfmqueue_rb3compat import ActionGroup
 from lastfmqueue_rb3compat import ApplicationShell
 
 import rb
-import urllib
+import urllib.request, urllib.parse, urllib.error
 import random
 from xml.dom import minidom
 
 import gettext
-gettext.install('rhythmbox', RB.locale_dir(), unicode=True)
+gettext.install('rhythmbox', RB.locale_dir())
 
 ui_str = \
     """<ui>
@@ -123,8 +123,8 @@ class LastFmQueuePlugin (GObject.Object, Peas.Activatable):
         if entry == self.current_entry or not entry:
             return
         self.current_entry = entry
-        title = unicode(entry.get_string(RB.RhythmDBPropType.TITLE), 'utf-8')
-        artist = unicode(entry.get_string(RB.RhythmDBPropType.ARTIST), 'utf-8')
+        title = str(entry.get_string(RB.RhythmDBPropType.TITLE), 'utf-8')
+        artist = str(entry.get_string(RB.RhythmDBPropType.ARTIST), 'utf-8')
         try:
             self.past_entries.pop(self.past_entries.index((artist, title)))
         except ValueError:
@@ -133,8 +133,8 @@ class LastFmQueuePlugin (GObject.Object, Peas.Activatable):
         loader = rb.Loader()
         url = 'http://ws.audioscrobbler.com/2.0/?method=track.getsimilar' \
             '&artist=%s&track=%s&api_key=4353df7956417de92999306424bc9395' % \
-            (urllib.quote(artist.encode('utf-8')),
-            urllib.quote(title.encode('utf-8')))
+            (urllib.parse.quote(artist.encode('utf-8')),
+            urllib.parse.quote(title.encode('utf-8')))
 
         loader.get_url(url, self.load_list)
 
